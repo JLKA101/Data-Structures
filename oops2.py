@@ -49,9 +49,38 @@ class movieticket:
 
 tickets = [
     movieticket(1, "JJK 0", "Not assigned", "A1", 5),
-    movieticket(2, "JJK 0", "Not assigned", "A1", 5),
-    movieticket(3, "JJK 0", "Not assigned", "A1", 5)
+    movieticket(2, "JJK 0", "Not assigned", "A2", 5),
+    movieticket(3, "JJK 0", "Not assigned", "A3", 5)
 ]
 
 while True:
-    print("")
+    print("\n1. View seats 2. Book ticket 3. Cancel ticket 4. Bill 5. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        for ticket in tickets:
+            ticket.display()
+    elif choice == "2":
+        seat = input("Enter seat number: ").upper()
+        ticket = next((t for t in tickets if t.seat_number == seat), None)
+        if ticket:
+            ticket.book(input("Customer name: "))
+        else:
+            print("Seat not found.")
+    elif choice == "3":
+        booking_id = int(input("Booking ID: "))
+        ticket = next((t for t in tickets if t.booking_id == booking_id), None)
+        if ticket:
+            ticket.cancel()
+        else:
+            print("Booking not found.")
+    elif choice == "4":
+        booked = [t for t in tickets if t.booking_status == "Booked"]
+        subtotal = sum(t.get_ticket_price() for t in booked)
+        discount = subtotal * 0.10 if len(booked) >= 3 else 0
+        print(f"Tickets: {len(booked)} | Subtotal: Rs. {subtotal:.2f} | "
+              f"Discounts: Rs. {discount:.2f} | Total: Rs. {subtotal-discount:.2f}")
+    elif choice == "5":
+        break
+    else:
+        print("Invalid choice.")
+        
